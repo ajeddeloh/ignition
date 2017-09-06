@@ -39,9 +39,10 @@ type DirectoryEmbedded1 struct {
 }
 
 type Disk struct {
-	Device     string      `json:"device,omitempty"`
-	Partitions []Partition `json:"partitions,omitempty"`
-	WipeTable  bool        `json:"wipeTable,omitempty"`
+	Device                     string      `json:"device,omitempty"`
+	DisallowUnmanagePartitions bool        `json:"disallowUnmanagePartitions,omitempty"`
+	Partitions                 []Partition `json:"partitions,omitempty"`
+	WipeTable                  bool        `json:"wipeTable,omitempty"`
 }
 
 type File struct {
@@ -137,12 +138,14 @@ type NodeUser struct {
 }
 
 type Partition struct {
-	GUID     string `json:"guid,omitempty"`
-	Label    string `json:"label,omitempty"`
-	Number   int    `json:"number,omitempty"`
-	Size     int    `json:"size,omitempty"`
-	Start    int    `json:"start,omitempty"`
-	TypeGUID string `json:"typeGuid,omitempty"`
+	GUID               string  `json:"guid,omitempty"`
+	Label              *string `json:"label,omitempty"`
+	Number             int     `json:"number,omitempty"`
+	ShouldExist        *bool   `json:"shouldExist,omitempty"`
+	Size               *int    `json:"size,omitempty"`
+	Start              *int    `json:"start,omitempty"`
+	TypeGUID           string  `json:"typeGuid,omitempty"`
+	WipePartitionEntry bool    `json:"wipePartitionEntry,omitempty"`
 }
 
 type Passwd struct {
@@ -187,7 +190,7 @@ type RaidOption string
 type SSHAuthorizedKey string
 
 type Security struct {
-	TLS TLS `json:"tls,omitempty"`
+	TLS `json:"tls,omitempty"`
 }
 
 type Storage struct {
