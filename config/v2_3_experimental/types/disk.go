@@ -75,13 +75,13 @@ func (n Disk) partitionNumbersCollide() bool {
 	return false
 }
 
-// end returns the last sector of a partition.
+// end returns the last sector of a partition. Only used by partitionsOverlap. Requires non-nil Start and Size.
 func (p Partition) end() int {
-	if p.Size == 0 {
+	if *p.Size == 0 {
 		// a size of 0 means "fill available", just return the start as the end for those.
-		return p.Start
+		return *p.Start
 	}
-	return p.Start + p.Size - 1
+	return *p.Start + *p.Size - 1
 }
 
 // partitionsOverlap returns true if any explicitly dimensioned partitions overlap
@@ -89,27 +89,27 @@ func (n Disk) partitionsOverlap() bool {
 	for _, p := range n.Partitions {
 		// Starts of 0 are placed by sgdisk into the "largest available block" at that time.
 		// We aren't going to check those for overlap since we don't have the disk geometry.
-		if p.Start == 0 {
+		if p.Start == nil || p.Size == nil || *p.Start == 0 {
 			continue
 		}
 
 		for _, o := range n.Partitions {
-			if p == o || o.Start == 0 {
+			if o.Start == nil || o.Size == nil || p == o || *o.Start == 0 {
 				continue
 			}
 
 			// is p.Start within o?
-			if p.Start >= o.Start && p.Start <= o.end() {
+			if *p.Start >= *o.Start && *p.Start <= o.end() {
 				return true
 			}
 
 			// is p.end() within o?
-			if p.end() >= o.Start && p.end() <= o.end() {
+			if p.end() >= *o.Start && p.end() <= o.end() {
 				return true
 			}
 
 			// do p.Start and p.end() straddle o?
-			if p.Start < o.Start && p.end() > o.end() {
+			if *p.Start < *o.Start && p.end() > o.end() {
 				return true
 			}
 		}
@@ -120,7 +120,7 @@ func (n Disk) partitionsOverlap() bool {
 // partitionsMisaligned returns true if any of the partitions don't start on a 2048-sector (1MiB) boundary.
 func (n Disk) partitionsMisaligned() bool {
 	for _, p := range n.Partitions {
-		if (p.Start & (2048 - 1)) != 0 {
+		if p.Start != nil && ((*p.Start & (2048 - 1)) != 0) {
 			return true
 		}
 	}
