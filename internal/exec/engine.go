@@ -78,7 +78,7 @@ func (e Engine) Run(stageName string) error {
 	cfg, err := e.acquireConfig()
 	switch err {
 	case nil:
-	case errors.ErrCloudConfig, errors.ErrScript, errors.ErrEmpty:
+	case errors.ErrCloudConfig, errors.ErrEmpty:
 		e.Logger.Info("%v: ignoring user-provided config", err)
 		cfg, r, err = system.FetchDefaultConfig(e.Logger)
 		e.logReport(r)

@@ -26,7 +26,6 @@ var (
 	ErrCloudConfig        = errors.New("not a config (found coreos-cloudconfig)")
 	ErrEmpty              = errors.New("not a config (empty)")
 	ErrUnknownVersion     = errors.New("unsupported config version")
-	ErrScript             = errors.New("not a config (found coreos-cloudinit script)")
 	ErrDeprecated         = errors.New("config format deprecated")
 	ErrCompressionInvalid = errors.New("invalid compression method")
 
