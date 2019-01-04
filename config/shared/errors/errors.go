@@ -23,7 +23,6 @@ import (
 var (
 	// Parsing / general errors
 	ErrInvalid            = errors.New("config is not valid")
-	ErrCloudConfig        = errors.New("not a config (found coreos-cloudconfig)")
 	ErrEmpty              = errors.New("not a config (empty)")
 	ErrUnknownVersion     = errors.New("unsupported config version")
 	ErrDeprecated         = errors.New("config format deprecated")
