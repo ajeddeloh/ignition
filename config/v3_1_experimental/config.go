@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package v3_0_experimental
+package v3_1_experimental
 
 import (
 	"reflect"
@@ -21,7 +21,6 @@ import (
 	"github.com/coreos/ignition/config/translate"
 	"github.com/coreos/ignition/config/util"
 	"github.com/coreos/ignition/config/v3_0_experimental/types"
-	v3_types "github.com/coreos/ignition/config/v3_1_experimental/types"
 	"github.com/coreos/ignition/config/validate"
 	"github.com/coreos/ignition/config/validate/report"
 
@@ -36,7 +35,7 @@ func Parse(rawConfig []byte) (types.Config, report.Report, error) {
 		return types.Config{}, report.Report{}, errors.ErrEmpty
 	}
 
-	var config v3_types.Config
+	var config types.Config
 
 	if err := json.Unmarshal(rawConfig, &config); err != nil {
 		rpt, err := util.HandleParseErrors(rawConfig)
