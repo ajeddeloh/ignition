@@ -18,6 +18,7 @@ import (
 	"github.com/coreos/go-semver/semver"
 
 	"github.com/coreos/ignition/config/shared/errors"
+	"github.com/coreos/ignition/config/v3_1_experimental/types"
 	"github.com/coreos/ignition/config/validate/report"
 )
 
@@ -35,6 +36,11 @@ func (c ConfigReference) ValidateSource() report.Report {
 
 func (v Ignition) Semver() (*semver.Version, error) {
 	return semver.NewVersion(v.Version)
+}
+
+func (v *Ignition) Translate(types.Ignition) error {
+	v.Version = "3.0.0"
+	return nil
 }
 
 func (v Ignition) Validate() report.Report {

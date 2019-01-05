@@ -23,6 +23,7 @@ import (
 var (
 	ErrSameType      = errors.New("Translating to and from same type")
 	ErrNoTranslation = errors.New("No translation defined and implicit translation impossible")
+	ErrBadConverter  = errors.New("Convert() has wrong type")
 )
 
 func getFieldNameWithJsonTag(v reflect.Value, tag string) string {
@@ -131,6 +132,25 @@ func translateSlice(to, from reflect.Value) error {
 }
 
 func Translate(to, from reflect.Value) error {
+	method, found := to.Addr().Type().MethodByName("Translate")
+	if found {
+		fmt.Println("asdfadsfadsfasdfadasdfasdf")
+		methodT := method.Type
+		// manually check it is *to.Convert(from from.T) -> error
+		if methodT.NumOut() != 1 || methodT.NumIn() != 1 {
+			return ErrBadConverter
+		}
+		if methodT.In(0) != from.Type() {
+			return ErrBadConverter
+		}
+		var err error
+		if methodT.Out(0) != reflect.TypeOf(err) {
+			return ErrBadConverter
+		}
+		// ok good to go
+		errv := method.Func.Call([]reflect.Value{from})[0]
+		return errv.Interface().(error)
+	}
 	switch from.Kind() {
 	case reflect.Struct:
 		return translateStruct(to, from)
